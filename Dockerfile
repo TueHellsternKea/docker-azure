@@ -1,17 +1,15 @@
-FROM python:3.6
+FROM python:3.8-slim-buster
 
-# Create a directory where the code is to be hosted
-RUN mkdir /app
 
-# Define the working directory in the container
-WORKDIR /app 
 
-# Copy and install the requirements.
-COPY requirements.txt /app/requirements.txt
-RUN pip install -r requirements.txt
+RUN apt-get update
+RUN apt-get install nano
 
-# Define environment variables
-ENV dash_port=8050
-ENV dash_debug="True"
+RUN mkdir wd
+WORKDIR wd
+COPY app/requirements.txt .
+RUN pip3 install -r requirements.txt
 
-CMD ["python", "dash_app.py"]
+COPY app/ ./
+
+CMD [ "gunicorn", "--workers=5", "--threads=1", "-b 0.0.0.0:80", "app:server"]
