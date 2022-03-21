@@ -30,6 +30,7 @@ app.layout = dbc.Container([
 @app.callback(
     Output('your-graph', 'figure'),
     Input('year-slider', 'value'))
+    
 def update_figure(selected_year):
     filtered_df = df[df.year == selected_year]
 
